@@ -25,6 +25,8 @@ import seedu.address.storage.Storage;
 public class LogicManager implements Logic {
     public static final String FILE_OPS_ERROR_FORMAT = "Could not save data due to the following error: %s";
 
+    public static final String MESSAGE_COMMAND_CANCELLED = "Command cancelled.";
+
     public static final String FILE_OPS_PERMISSION_ERROR_FORMAT =
             "Could not save data to file %s due to insufficient permissions to write to the file or the folder.";
 
@@ -51,12 +53,16 @@ public class LogicManager implements Logic {
         CommandResult commandResult;
         String trimmedInput = commandText.trim().toLowerCase();
 
-        if (pendingConfirmation != null && trimmedInput.equals("yes")) {
+        if (pendingConfirmation != null) {
             Supplier<CommandResult> action = pendingConfirmation;
             pendingConfirmation = null;
-            commandResult = action.get();
+
+            if (trimmedInput.equals("yes")) {
+                commandResult = action.get();
+            } else {
+                commandResult = new CommandResult(MESSAGE_COMMAND_CANCELLED);
+            }
         } else {
-            pendingConfirmation = null;
             Command command = addressBookParser.parseCommand(commandText);
             commandResult = command.execute(model);
 
