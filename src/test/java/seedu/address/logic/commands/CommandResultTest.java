@@ -33,6 +33,9 @@ public class CommandResultTest {
 
         // different exit value -> returns false
         assertFalse(commandResult.equals(new CommandResult("feedback", false, true)));
+
+        // different awaitingConfirmation value -> returns false
+        assertFalse(commandResult.equals(new CommandResult("feedback", false, false, () -> new CommandResult("ok"))));
     }
 
     @Test
@@ -50,6 +53,10 @@ public class CommandResultTest {
 
         // different exit value -> returns different hashcode
         assertNotEquals(commandResult.hashCode(), new CommandResult("feedback", false, true).hashCode());
+
+        // different awaitingConfirmation value -> returns different hashcode
+        assertNotEquals(commandResult.hashCode(),
+                new CommandResult("feedback", false, false, () -> new CommandResult("ok")).hashCode());
     }
 
     @Test

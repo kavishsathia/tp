@@ -13,6 +13,7 @@ import seedu.address.model.person.Person;
 
 /**
  * Deletes a person identified using it's displayed index from the address book.
+ * The command first shows a preview of the person to delete and asks for confirmation.
  */
 public class DeleteCommand extends Command {
 
@@ -20,6 +21,7 @@ public class DeleteCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes the person identified by the index number used in the displayed person list.\n"
+            + "A confirmation prompt will be shown before the person is deleted.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 

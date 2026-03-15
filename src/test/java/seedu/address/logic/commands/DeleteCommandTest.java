@@ -47,6 +47,10 @@ public class DeleteCommandTest {
         Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON);
 
+        // Build expected model before confirmation mutates state
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.deletePerson(personToDelete);
+
         CommandResult previewResult = deleteCommand.execute(model);
         assertTrue(previewResult.isAwaitingConfirmation());
 
@@ -57,9 +61,8 @@ public class DeleteCommandTest {
                 Messages.format(personToDelete));
         assertEquals(expectedMessage, confirmResult.getFeedbackToUser());
 
-        // Person should now be deleted
-        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        assertFalse(model.getFilteredPersonList().contains(personToDelete));
+        // Full model state should match expected
+        assertEquals(expectedModel, model);
     }
 
     @Test
@@ -129,14 +132,5 @@ public class DeleteCommandTest {
         DeleteCommand deleteCommand = new DeleteCommand(targetIndex);
         String expected = DeleteCommand.class.getCanonicalName() + "{targetIndex=" + targetIndex + "}";
         assertEquals(expected, deleteCommand.toString());
-    }
-
-    /**
-     * Updates {@code model}'s filtered list to show no one.
-     */
-    private void showNoPerson(Model model) {
-        model.updateFilteredPersonList(p -> false);
-
-        assertTrue(model.getFilteredPersonList().isEmpty());
     }
 }
