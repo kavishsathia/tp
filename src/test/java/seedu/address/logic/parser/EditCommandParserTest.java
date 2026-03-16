@@ -49,6 +49,7 @@ import seedu.address.testutil.EditPersonDescriptorBuilder;
 public class EditCommandParserTest {
 
     private static final String TAG_EMPTY = " " + PREFIX_TAG;
+    private static final String DELETE_TAG_EMPTY = " " + PREFIX_DELETE_TAG;
 
     private static final String MESSAGE_INVALID_FORMAT =
             String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE);
@@ -202,6 +203,17 @@ public class EditCommandParserTest {
         String userInput = targetIndex.getOneBased() + TAG_EMPTY;
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTags().build();
+        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_deleteAllTags_success() {
+        Index targetIndex = INDEX_THIRD_PERSON;
+        String userInput = targetIndex.getOneBased() + DELETE_TAG_EMPTY;
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTagsToRemove().build();
         EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
