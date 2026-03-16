@@ -210,7 +210,7 @@ public class MainWindow extends UiPart<Stage> {
     public void handleViewCommandResult(CommandResult commandResult) {
         Person personToView = commandResult.getPersonToView();
         if (personToView != null) {
-            personDetailsPanel.display(personToView); // Update the details panel with the selected person
+            personListPanel.selectPerson(personToView);
         }
     }
 }
