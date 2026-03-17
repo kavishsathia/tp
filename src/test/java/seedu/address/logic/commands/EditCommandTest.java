@@ -37,7 +37,7 @@ public class EditCommandTest {
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
-        Person editedPerson = new PersonBuilder().build();
+        Person editedPerson = new PersonBuilder().withTags("friends").build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(editedPerson).build();
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
 
@@ -95,6 +95,136 @@ public class EditCommandTest {
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(model.getFilteredPersonList().get(0), editedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_addTags_success() {
+        Index indexLastPerson = INDEX_FIRST_PERSON;
+        Person personToEdit = model.getFilteredPersonList().get(indexLastPerson.getZeroBased());
+        Person editedPerson = new PersonBuilder(personToEdit).withTags("friends", "colleagues").build();
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTags("colleagues").build();
+        EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToEdit, editedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_deleteTags_success() {
+        Index indexLastPerson = INDEX_FIRST_PERSON;
+        Person personToEdit = model.getFilteredPersonList().get(indexLastPerson.getZeroBased());
+        Person editedPerson = new PersonBuilder(personToEdit).withTags().build(); // No tags
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTagsToRemove("friends").build();
+        EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToEdit, editedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_addAndDeleteTags_success() {
+        Index indexLastPerson = INDEX_FIRST_PERSON;
+        Person personToEdit = model.getFilteredPersonList().get(indexLastPerson.getZeroBased());
+        // Original: "friends". Add: "colleagues", Remove: "friends". Result: "colleagues".
+        Person editedPerson = new PersonBuilder(personToEdit).withTags("colleagues").build();
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withTags("colleagues")
+                .withTagsToRemove("friends")
+                .build();
+        EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToEdit, editedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_addExistingTag_success() {
+        Index indexLastPerson = INDEX_FIRST_PERSON;
+        Person personToEdit = model.getFilteredPersonList().get(indexLastPerson.getZeroBased());
+        // Alice already has "friends".
+        Person editedPerson = new PersonBuilder(personToEdit).withTags("friends").build();
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTags("friends").build();
+        EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToEdit, editedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_deleteNonExistingTag_success() {
+        Index indexLastPerson = INDEX_FIRST_PERSON;
+        Person personToEdit = model.getFilteredPersonList().get(indexLastPerson.getZeroBased());
+        // Alice has "friends".
+        Person editedPerson = new PersonBuilder(personToEdit).withTags("friends").build();
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTagsToRemove("colleagues").build();
+        EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToEdit, editedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_deleteAllTags_success() {
+        Index indexLastPerson = INDEX_FIRST_PERSON;
+        Person personToEdit = model.getFilteredPersonList().get(indexLastPerson.getZeroBased());
+        // Alice has "friends". Expecting no tags.
+        Person editedPerson = new PersonBuilder(personToEdit).withTags().build();
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTagsToRemove().build();
+        EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToEdit, editedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_replaceTags_success() {
+        Index indexLastPerson = INDEX_FIRST_PERSON;
+        Person personToEdit = model.getFilteredPersonList().get(indexLastPerson.getZeroBased());
+        // Alice has "friends". Clear then add "colleagues"
+        Person editedPerson = new PersonBuilder(personToEdit).withTags("colleagues").build();
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withTagsToRemove() // Clear tags
+                .withTags("colleagues") // Add new tag
+                .build();
+        EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToEdit, editedPerson);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
