@@ -70,6 +70,13 @@ public class TagsRegistry {
     }
 
     /**
+     * Clears all tags from the registry.
+     */
+    public void clear() {
+        tagCounts.clear();
+    }
+
+    /**
      * Internal helper to remove a set of tags.
      */
     private void removeTags(Set<Tag> tags) {
