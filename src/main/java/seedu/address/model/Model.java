@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.TagsRegistry;
 
 /**
  * The API of the Model component.
@@ -84,4 +85,16 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
+
+    /**
+     * Returns the {@link TagsRegistry} associated with this model.
+     *
+     * <p>The {@code TagsRegistry} keeps track of all tags in the address book and
+     * their counts. It is automatically updated whenever persons are added, deleted,
+     * or edited through the model. Commands and other components can access it
+     * to query or update tag-related data consistently.</p>
+     *
+     * @return the {@code TagsRegistry} instance used by this model.
+     */
+    TagsRegistry getTagsRegistry();
 }

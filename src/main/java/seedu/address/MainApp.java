@@ -46,7 +46,6 @@ public class MainApp extends Application {
     protected Storage storage;
     protected Model model;
     protected Config config;
-    protected TagsRegistry tagsRegistry;
 
     @Override
     public void init() throws Exception {
@@ -63,9 +62,6 @@ public class MainApp extends Application {
         storage = new StorageManager(addressBookStorage, userPrefsStorage);
 
         model = initModelManager(storage, userPrefs);
-
-        tagsRegistry = new TagsRegistry();
-        tagsRegistry.initialize(model.getAddressBook().getPersonList());
 
         logic = new LogicManager(model, storage);
 
