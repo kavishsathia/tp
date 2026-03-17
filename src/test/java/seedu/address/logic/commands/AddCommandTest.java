@@ -23,6 +23,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.TagsRegistry;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddCommandTest {
@@ -167,6 +168,31 @@ public class AddCommandTest {
 
         @Override
         public void updateFilteredPersonList(Predicate<Person> predicate) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public TagsRegistry getTagsRegistry() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addTags(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deleteTags(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void updateEditedTags(Person oldPerson, Person editedPerson) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void clearTagsRegistry() {
             throw new AssertionError("This method should not be called.");
         }
     }

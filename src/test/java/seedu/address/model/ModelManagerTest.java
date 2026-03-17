@@ -11,16 +11,44 @@ import static seedu.address.testutil.TypicalPersons.BENSON;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.person.Address;
+import seedu.address.model.person.Email;
+import seedu.address.model.person.Name;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.Person;
+import seedu.address.model.person.Phone;
+import seedu.address.model.tag.Tag;
+import seedu.address.model.tag.TagsRegistry;
 import seedu.address.testutil.AddressBookBuilder;
 
 public class ModelManagerTest {
 
     private ModelManager modelManager = new ModelManager();
+    private Person aliceWithTags;
+    private Person bobWithTags;
+
+    @BeforeEach
+    void setUp() {
+        Set<Tag> aliceTags = new HashSet<>();
+        aliceTags.add(new Tag("friends"));
+        aliceTags.add(new Tag("colleagues"));
+
+        Set<Tag> bobTags = new HashSet<>();
+        bobTags.add(new Tag("family"));
+
+        aliceWithTags = new Person(new Name("Alice"), new Phone("12345678"), new Email("alice@example.com"),
+                new Address("123, Wonderland"), aliceTags);
+
+        bobWithTags = new Person(new Name("Bob"), new Phone("87654321"), new Email("bob@example.com"),
+                new Address("456, Wonderland"), bobTags);
+    }
 
     @Test
     public void constructor() {
@@ -128,5 +156,56 @@ public class ModelManagerTest {
         UserPrefs differentUserPrefs = new UserPrefs();
         differentUserPrefs.setAddressBookFilePath(Paths.get("differentFilePath"));
         assertFalse(modelManager.equals(new ModelManager(addressBook, differentUserPrefs)));
+    }
+
+    //=========== Tag Registry Tests =============================================================
+
+    @Test
+    public void addTags_person_tagsRegistered() {
+        modelManager.addTags(aliceWithTags);
+        TagsRegistry registry = modelManager.getTagsRegistry();
+
+        assertEquals(1, registry.getCount(new Tag("friends")));
+        assertEquals(1, registry.getCount(new Tag("colleagues")));
+    }
+
+    @Test
+    public void deleteTags_person_tagsRemoved() {
+        modelManager.addTags(aliceWithTags);
+        modelManager.deleteTags(aliceWithTags);
+
+        TagsRegistry registry = modelManager.getTagsRegistry();
+        assertEquals(0, registry.getCount(new Tag("friends")));
+        assertEquals(0, registry.getCount(new Tag("colleagues")));
+    }
+
+    @Test
+    public void updateEditedTags_person_tagsUpdated() {
+        modelManager.addTags(aliceWithTags);
+
+        // Alice edits: remove "colleagues" and add "family"
+        Set<Tag> updatedTags = new HashSet<>();
+        updatedTags.add(new Tag("friends"));
+        updatedTags.add(new Tag("family"));
+
+        Person aliceEdited = new Person(new Name("Alice2"), new Phone("12345678"),
+                new Email("alice@example.com"), new Address("123, Wonderland"), updatedTags);
+
+        modelManager.updateEditedTags(aliceWithTags, aliceEdited);
+
+        TagsRegistry registry = modelManager.getTagsRegistry();
+        assertEquals(1, registry.getCount(new Tag("friends")));
+        assertEquals(0, registry.getCount(new Tag("colleagues")));
+        assertEquals(1, registry.getCount(new Tag("family")));
+    }
+
+    @Test
+    public void clearTagsRegistry_registryEmpty() {
+        modelManager.addTags(aliceWithTags);
+        modelManager.addTags(bobWithTags);
+
+        modelManager.clearTagsRegistry();
+
+        assertTrue(modelManager.getTagsRegistry().isEmpty());
     }
 }

@@ -89,4 +89,18 @@ public class TagsRegistry {
             }
         }
     }
+
+    /**
+     * Returns the number of persons associated with the given {@code tag}.
+     */
+    public int getCount(Tag tag) {
+        return tagCounts.getOrDefault(tag, 0);
+    }
+
+    /**
+     * Returns true if the TagsRegistry currently has no tags.
+     */
+    public boolean isEmpty() {
+        return tagCounts.isEmpty();
+    }
 }
