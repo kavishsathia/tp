@@ -195,6 +195,11 @@ public class AddCommandTest {
         public void clearTagsRegistry() {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public String getFormattedTags() {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**

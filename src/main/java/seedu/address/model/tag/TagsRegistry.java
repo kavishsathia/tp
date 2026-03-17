@@ -3,6 +3,7 @@ package seedu.address.model.tag;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import seedu.address.model.person.Person;
 
@@ -102,5 +103,19 @@ public class TagsRegistry {
      */
     public boolean isEmpty() {
         return tagCounts.isEmpty();
+    }
+
+    /**
+     * Returns a formatted string of all tags, sorted alphabetically.
+     */
+    public String getFormattedTags() {
+        if (tagCounts.isEmpty()) {
+            return "";
+        }
+
+        return tagCounts.keySet().stream()
+                .map(tag -> tag.tagName) // or Tag::getTagName if you refactor
+                .sorted()
+                .collect(Collectors.joining(", "));
     }
 }

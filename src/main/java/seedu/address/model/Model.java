@@ -87,22 +87,32 @@ public interface Model {
     void updateFilteredPersonList(Predicate<Person> predicate);
 
     /**
-     * Returns the {@link TagsRegistry} associated with this model.
-     *
-     * <p>The {@code TagsRegistry} keeps track of all tags in the address book and
-     * their counts. It is automatically updated whenever persons are added, deleted,
-     * or edited through the model. Commands and other components can access it
-     * to query or update tag-related data consistently.</p>
-     *
-     * @return the {@code TagsRegistry} instance used by this model.
+     * Returns the {@code TagsRegistry} associated with this model.
      */
     TagsRegistry getTagsRegistry();
 
+    /**
+     * Adds a person and updates the TagsRegistry accordingly.
+     */
     void addTags(Person person);
 
+    /**
+     * Deletes a person and updates the TagsRegistry accordingly.
+     */
     void deleteTags(Person person);
 
+    /**
+     * Updates a person and the TagsRegistry accordingly.
+     */
     void updateEditedTags(Person oldPerson, Person editedPerson);
 
+    /**
+     * Clears the TagsRegistry completely.
+     */
     void clearTagsRegistry();
+
+    /**
+     * Returns all tags formatted as a string.
+     */
+    String getFormattedTags();
 }

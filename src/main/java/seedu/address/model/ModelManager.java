@@ -151,43 +151,33 @@ public class ModelManager implements Model {
 
     //=========== Tag Registry Modifiers =============================================================
 
-    /**
-     * Returns the {@code TagsRegistry} associated with this model.
-     */
     @Override
     public TagsRegistry getTagsRegistry() {
         return tagsRegistry;
     }
 
-    /**
-     * Adds a person and updates the TagsRegistry accordingly.
-     */
     @Override
     public void addTags(Person person) {
         tagsRegistry.addPerson(person);
     }
 
-    /**
-     * Deletes a person and updates the TagsRegistry accordingly.
-     */
     @Override
     public void deleteTags(Person person) {
         tagsRegistry.removePerson(person);
     }
 
-    /**
-     * Updates a person and the TagsRegistry accordingly.
-     */
     @Override
     public void updateEditedTags(Person oldPerson, Person editedPerson) {
         tagsRegistry.updatePerson(oldPerson, editedPerson);
     }
 
-    /**
-     * Clears the TagsRegistry completely.
-     */
     @Override
     public void clearTagsRegistry() {
         tagsRegistry.clear();
+    }
+
+    @Override
+    public String getFormattedTags() {
+        return tagsRegistry.getFormattedTags();
     }
 }
