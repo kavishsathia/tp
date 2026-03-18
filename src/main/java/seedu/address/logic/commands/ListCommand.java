@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.function.Predicate;
@@ -21,8 +22,8 @@ public class ListCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Lists all persons. "
             + "Optionally filters by one or more tags (OR relationship).\n"
-            + "Parameters: [t/TAG]...\n"
-            + "Example: " + COMMAND_WORD + " t/friend t/colleague";
+            + "Parameters: [" + PREFIX_TAG + "TAG]...\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "friend " + PREFIX_TAG + "colleague";
 
     private final Predicate<Person> predicate;
 
