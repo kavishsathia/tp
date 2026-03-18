@@ -107,7 +107,7 @@ public class TagsRegistry {
         }
 
         return tagCounts.keySet().stream()
-                .map(tag -> tag.tagName) // or Tag::getTagName if you refactor
+                .map(tag -> tag.tagName)
                 .sorted()
                 .collect(Collectors.joining(", "));
     }
