@@ -191,4 +191,25 @@ public class ModelManagerTest {
     public void getFormattedTags_emptyRegistry_returnsEmptyString() {
         assertEquals("", modelManager.getFormattedTags());
     }
+
+    @Test
+    public void setAddressBook_resetsTagsRegistry() {
+        ModelManager model = new ModelManager();
+
+        // Original data
+        Person personA = new PersonBuilder().withTags("friend").build();
+        model.addTags(personA);
+
+        // New address book with different tag
+        AddressBook newBook = new AddressBook();
+        Person personB = new PersonBuilder().withTags("colleague").build();
+        newBook.addPerson(personB);
+
+        model.setAddressBook(newBook);
+
+        String tags = model.getFormattedTags();
+
+        assertFalse(tags.contains("friend"));     // old tag gone
+        assertTrue(tags.contains("colleague"));   // new tag present
+    }
 }
