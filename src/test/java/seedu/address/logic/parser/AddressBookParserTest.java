@@ -97,4 +97,13 @@ public class AddressBookParserTest {
     public void parseCommand_unknownCommand_throwsParseException() {
         assertThrows(ParseException.class, MESSAGE_UNKNOWN_COMMAND, () -> parser.parseCommand(":unknownCommand"));
     }
+
+    @Test
+    public void parseCommand_withoutColonPrefix_throwsParseException() {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                "Commands must start with a colon. E.g., :add, :delete, :list");
+        assertThrows(ParseException.class, expectedMessage, () -> parser.parseCommand("add n/John"));
+        assertThrows(ParseException.class, expectedMessage, () -> parser.parseCommand("delete 1"));
+        assertThrows(ParseException.class, expectedMessage, () -> parser.parseCommand("list"));
+    }
 }
