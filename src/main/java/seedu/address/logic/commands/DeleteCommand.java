@@ -53,7 +53,7 @@ public class DeleteCommand extends Command {
             model.deleteTags(personToDelete);
             return new CommandResult(
                     String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
-        });
+        }, null);
     }
 
     @Override

@@ -24,6 +24,6 @@ public class ClearCommand extends Command {
             model.setAddressBook(new AddressBook());
             model.clearTagsRegistry();
             return new CommandResult(MESSAGE_SUCCESS);
-        });
+        }, null);
     }
 }
