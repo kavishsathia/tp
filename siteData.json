@@ -39,7 +39,7 @@
       "src": "DeveloperGuide.md",
       "title": "Developer Guide",
       "headings": {
-        "ab-3-developer-guide": "AB-3 Developer Guide",
+        "0rb1t-developer-guide": "0rb1t Developer Guide",
         "acknowledgements": "Acknowledgements",
         "setting-up-getting-started": "Setting up, getting started",
         "design": "Design",
@@ -110,6 +110,7 @@
         "table-of-contents": "Table of Contents",
         "quick-start": "Quick Start",
         "command-list": "Command List",
+        "notes-about-the-command-format": "Notes about the Command Format",
         "accessing-command-history": "Accessing Command History",
         "adding-contacts": "Adding Contacts",
         "adding-notes-to-contacts": "Adding Notes to Contacts",
@@ -139,7 +140,7 @@
       "src": "index.md",
       "title": "",
       "headings": {
-        "addressbook-level-3": "AddressBook Level-3"
+        "0rb1t": "0rb1t"
       },
       "headingKeywords": {}
     },
